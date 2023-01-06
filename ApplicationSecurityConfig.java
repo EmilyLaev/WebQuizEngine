@@ -1,6 +1,5 @@
 package engine;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,13 +12,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+//Configuration for the Spring security
 @Configuration
 @EnableWebSecurity
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    // Loads the user's details.
     @Autowired
     private UserDetailsService userDetailsService;
 
+    // Configures security for the application.
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -32,7 +34,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic();
     }
-
+    
+    // Creates a bean for an authentication provider that retrieves user information from a UserDetailsService
+    // Checks authentication based on the user's credentials.
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider
@@ -43,6 +47,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         return provider;
     }
 
+    // Creates a bean for a password encoder that uses the BCrypt algorithm to encode passwords.
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(11);
