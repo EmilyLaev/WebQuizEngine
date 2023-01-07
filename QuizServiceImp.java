@@ -20,16 +20,22 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+//Implementation of the QuizService interface.
 @Service
 public class QuizServiceImp implements QuizService {
 
+    //Repository for accessing Quiz entities in the database.
     @Autowired
     private QuizRepository quizRepository;
 
+    //repository for accessing CompletedLog entities in the database
     @Autowired
     private CompletedLogRepository completedLogRepository;
 
 
+    //Saves a Quiz object to the database.
+    //Also sets the user field of the Quiz object to the current logged-in user.
+    //If the Quiz object is null, throws a ResponseStatusException with a BAD_REQUEST status.
     @Override
     public Quiz saveQuiz(Quiz quiz) {
         Object currentUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -47,6 +53,10 @@ public class QuizServiceImp implements QuizService {
         return quizRepository.findAll();
     }
 
+    // Get a quiz by its ID
+    // Get the quiz from the database
+    // If the quiz is present, return it
+    // If the quiz is not found, throw a NOT_FOUND exception
     @Override
     public Quiz getQuizById(Integer quizId) {
         Optional<Quiz> byId = quizRepository.findById(quizId);
@@ -56,6 +66,7 @@ public class QuizServiceImp implements QuizService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
+    // Check if a user's answers to a quiz are correct and return a Response object
     @Override
     public Response getAnswer(int id, Answer answer) {
         Optional<Quiz> first = printAllQuizzes().stream()
@@ -66,8 +77,7 @@ public class QuizServiceImp implements QuizService {
             List<Integer> correctAnswers = first.get().getAnswer();
             List<Integer> userAnswers = answer.getAnswer();
 
-//           boolean isEqual = correctAnswers.equals(userAnswers); zasto ovo ne radi?
-
+            //boolean isEqual = correctAnswers.equals(userAnswers)
             int count = isEqual(correctAnswers, userAnswers);
 
             if ((count == correctAnswers.size() && count == userAnswers.size()) ||
