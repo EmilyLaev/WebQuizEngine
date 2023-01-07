@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
+// Service interface for Quiz entity
+//Has the get, save and delete method for the quiz itself
 public interface QuizService {
 
     Quiz saveQuiz(Quiz quiz);
