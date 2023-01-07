@@ -11,14 +11,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+//A service implementation class for the User entity.
+//Implements the UserService and UserDetailsService interfaces.
 @Service
 public class UserServiceInp implements UserService, UserDetailsService {
 
+    //a repository interface for the User entity
     @Autowired
     private UserRepository userRepository;
+    //An object that can be used to encode passwords
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    //Saves the user's data to the main database
     @Override
     public void saveUser(User user) {
         if (user == null || userRepository.findByEmail(user.getEmail()) != null) {
@@ -32,6 +37,7 @@ public class UserServiceInp implements UserService, UserDetailsService {
         userRepository.save(current);
     }
 
+    //A method to retrive user data by entering the username
     public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username);
         if (user == null) {
